@@ -92,8 +92,6 @@ export const Employees = ({employees, handleDelete, handleOpen}: Props) => {
             dateOfDismissal: employee.dateOfDismissal == "0001-01-01T00:00:00" ? 
               undefined : dayjs(employee.dateOfDismissal).format("YYYY-MM-DD"),
             //dateOfDismissal: dayjs(employee.dateOfDismissal).format("DD-MM-YYYY"),
-            dateOfReceiptDatePicker: dayjs(employee.dateOfReceipt).format("DD-MM-YYYY"),
-            dateOfDismissalDatePicker: dayjs(employee.dateOfDismissal).format("DD-MM-YYYY"),
             privilegesGuid: employee.privilegesGuid,
             privilegesString: employee.privilegesString,
             positionGuid: employee.positionGuid,
