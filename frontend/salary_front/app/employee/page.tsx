@@ -8,6 +8,8 @@ import Title from "antd/es/skeleton/Title";
 import { CreateUpdateEmployee, Mode } from "../components/CreateUpdateEmployee";
 import { getAllPositions } from "../services/position";
 import { getAllPrivilege } from "../services/privilege";
+import { utils, writeFile } from "xlsx";
+import dayjs from "dayjs";
 
 
 //////////////////////////////////////////////////////////////////////////// получаем позиции и привилегии
@@ -118,10 +120,52 @@ export default function EmployeePage()
         setIsModalOpen(true);
     };
 
+    const updateData = async () => {
+        const employees = await getAllEmployees();
+        setEmployees(employees);
+    }
+
+    const getPrivilegesString =  (privil:string[]) => {
+        let privString = "";
+        privil.map((e) => (
+            privString= privString + e
+        ))
+        return privString;
+    }
+
+        const exportData = async () => {
+        updateData();
+        let tableData: any[] = [];
+        employees.map((employee : Employee) => (
+            tableData.push({
+                Фамилия:employee.surname,
+                Имя:employee.name,
+                Отчество:employee.patronymic,
+                Должность: employee.positionString,
+                Льготы_Надбавки: getPrivilegesString(employee.privilegesString),
+                СНИЛС: employee.snils,
+                Серия_паспорта: employee.pSeria,
+                Номер_паспорта: employee.pNumber,
+                Ставка: employee.rate,
+                Дата_приема: dayjs(employee.dateOfReceipt).format("YYYY-MM-DD"),
+                Дата_увольнения: employee.dateOfDismissal == "0001-01-01T00:00:00" ? 
+                undefined : dayjs(employee.dateOfDismissal).format("YYYY-MM-DD"),
+                
+                
+            })))
+        var wb = utils.book_new(),
+        ws = utils.json_to_sheet(tableData);
+        utils.book_append_sheet(wb,ws,"Сотрудники");
+        writeFile(wb,"Сотрудники.xlsx");
+    };
+
     
     return ( 
         <div>
-            <div style={{display: "flex", justifyContent: "end", margin: "2vh"}}><Button type="primary" onClick={() => openModal()}>Добавить</Button></div>
+            
+            <div style={{margin: "2vh"}}><Button onClick={()=> exportData()} style={{display: "inline", color:"white", backgroundColor:"green"} }>Экспорт</Button>
+            <Button style={{display: "inline", marginLeft:"87%"}} type="primary" onClick={() => openModal()}>Добавить</Button>
+            </div>
             
             <CreateUpdateEmployee mode={mode} 
                 values={values} 

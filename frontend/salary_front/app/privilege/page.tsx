@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { createPrivilege, deletePrivilege, getAllPrivilege, PrivilegeRequest, updatePrivilege } from "../services/privilege";
 import Title from "antd/es/skeleton/Title";
 import { CreateUpdatePrivilege, Mode } from "../components/CreateUpdatePrivilege";
+import { utils, writeFile } from "xlsx";
 
 export default function PrivilegePage()
 {
@@ -70,10 +71,32 @@ export default function PrivilegePage()
         setIsModalOpen(true);
     };
 
+    const updateData = async () => {
+        const privileges = await getAllPrivilege();
+        setPrivileges(privileges);
+    }
+
+    const exportData = async () => {
+        updateData();
+        let tableData: any[] = [];
+        privileges.map((privilege : Privilege) => (
+            tableData.push({
+                Наименование: privilege.name,
+                Надбавка: privilege.allowance,
+            })))
+        var wb = utils.book_new(),
+        ws = utils.json_to_sheet(tableData);
+        utils.book_append_sheet(wb,ws,"Льготы_Надбавки");
+        writeFile(wb,"Льготы_Надбавки.xlsx");
+    };
+    //onClick={()=> exportData()}
+
     
     return ( 
         <div>
-            <div style={{display: "flex", justifyContent: "end", margin: "2vh"}}><Button type="primary" onClick={() => openModal()}>Добавить</Button></div>
+            <div style={{margin: "2vh"}}><Button onClick={()=> exportData()} style={{display: "inline", color:"white", backgroundColor:"green"} }>Экспорт</Button>
+            <Button style={{display: "inline", marginLeft:"87%"}} type="primary" onClick={() => openModal()}>Добавить</Button>
+            </div>
             
             <CreateUpdatePrivilege mode={mode} 
                 values={values} 

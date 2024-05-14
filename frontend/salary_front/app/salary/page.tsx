@@ -7,6 +7,8 @@ import { createSalary, deleteSalary, getAllSalarys, SalaryRequest, updateSalary 
 import Title from "antd/es/skeleton/Title";
 import { CreateUpdateSalary, Mode } from "../components/CreateUpdateSalary";
 import { getAllEmployees } from "../services/employee";
+import { utils, writeFile } from "xlsx";
+
 
 export default function SalaryPage()
 {
@@ -48,24 +50,24 @@ export default function SalaryPage()
         await createSalary(request);
         closeModal();
         
-        const positions = await getAllSalarys();
-        setSalarys(positions);
+        const salarys = await getAllSalarys();
+        setSalarys(salarys);
     };
 
     const handleUpdateSalary =async (id:string, request: SalaryRequest) => {
         await updateSalary(id,request);
         closeModal();
 
-        const positions = await getAllSalarys();
-        setSalarys(positions);
+        const salarys = await getAllSalarys();
+        setSalarys(salarys);
     };
 
     const handleDeleteSalary = async (id: string) => {
         await deleteSalary(id);
         closeModal();
 
-        const positions = await getAllSalarys();
-        setSalarys(positions);
+        const salarys = await getAllSalarys();
+        setSalarys(salarys);
     };
 
     const openModal = () => {
@@ -84,10 +86,35 @@ export default function SalaryPage()
         setIsModalOpen(true);
     };
 
+    const updateData = async () => {
+        const salarys = await getAllSalarys();
+        setSalarys(salarys);
+    }
+
+    const exportData = async () => {
+        updateData();
+        let tableData: any[] = [];
+        salarys.map((salary : Salary) => (
+            tableData.push({
+                Сотрудник: salary.employeeString,
+                Год_расчета:salary.year,
+                Месяц_расчета:salary.month,
+                
+                Отработанные_часы:salary.hours,
+                Заработная_плата:salary.summ,
+            })))
+        var wb = utils.book_new(),
+        ws = utils.json_to_sheet(tableData);
+        utils.book_append_sheet(wb,ws,"Salary");
+        writeFile(wb,"Salary.xlsx");
+    };
+ 
     
     return ( 
         <div>
-            <div style={{display: "flex", justifyContent: "end", margin: "2vh"}}><Button type="primary" onClick={() => openModal()}>Добавить</Button></div>
+            <div style={{margin: "2vh"}}><Button onClick={()=> exportData()}  style={{display: "inline", color:"white", backgroundColor:"green"}}>Экспорт</Button>
+            <Button style={{display: "inline", marginLeft:"87%"}} type="primary" onClick={() => openModal()}>Добавить</Button>
+            </div>
             
             <CreateUpdateSalary mode={mode} 
                 values={values} 

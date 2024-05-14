@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { createPosition, deletePosition, getAllPositions, PositionRequest, updatePosition } from "../services/position";
 import Title from "antd/es/skeleton/Title";
 import { CreateUpdatePosition, Mode } from "../components/CreateUpdatePosition";
+import { utils, writeFile } from "xlsx";
 
 export default function PositionPage()
 {
@@ -71,11 +72,31 @@ export default function PositionPage()
         setIsModalOpen(true);
     };
 
+    const updateData = async () => {
+        const positions = await getAllPositions();
+        setPositions(positions);
+    }
+
+    const exportData = async () => {
+        updateData();
+        let tableData: any[] = [];
+        positions.map((position : Position) => (
+            tableData.push({
+                Наименование: position.name,
+                Запланированные_часы: position.hours,
+                Оклад: position.salary,
+            })))
+        var wb = utils.book_new(),
+        ws = utils.json_to_sheet(tableData);
+        utils.book_append_sheet(wb,ws,"Должности");
+        writeFile(wb,"Должности.xlsx");
+    };
     
     return ( 
         <div>
-            <div style={{display: "flex", justifyContent: "end", margin: "2vh"}}><Button type="primary" onClick={() => openModal()}>Добавить</Button></div>
-            
+            <div style={{margin: "2vh"}}><Button onClick={()=> exportData()} style={{display: "inline", color:"white", backgroundColor:"green"} }>Экспорт</Button>
+            <Button style={{display: "inline", marginLeft:"87%"}} type="primary" onClick={() => openModal()}>Добавить</Button>
+            </div>            
             <CreateUpdatePosition mode={mode} 
                 values={values} 
                 isModalOpen={isModalOpen} 

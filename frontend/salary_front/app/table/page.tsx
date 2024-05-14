@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { createTable, deleteTable, getAllTables, TableRequest, updateTable } from "../services/table";
 import Title from "antd/es/skeleton/Title";
 import { getAllEmployees } from "../services/employee";
+import { utils, writeFile } from "xlsx";
 //import { CreateUpdatePosition, Mode } from "../components/CreateUpdatePosition";
 
 export const setEmployeeOptions = (employees: Employee[]) => {
@@ -107,6 +108,29 @@ export default function PositionPage()
     //     setValues(position);
     //     setIsModalOpen(true);
     // };
+
+    const updateData = async () => {
+        const tables = await getAllTables();
+        setTables(tables);
+    }
+
+    const exportData = async () => {
+        updateData();
+        let tableData: any[] = [];
+        tables.map((table : Table) => (
+            tableData.push({
+                ФИО_Сотрудника: table.employeeString ,
+                Год_отметки:table.year ,
+                Месяц_отметки:table.month ,
+                День_отметки:table.month,
+                Отметка:table.status,
+            })))
+        var wb = utils.book_new(),
+        ws = utils.json_to_sheet(tableData);
+        utils.book_append_sheet(wb,ws,"Табель");
+        writeFile(wb,"Табель.xlsx");
+    };
+    //onClick={()=> exportData()}
     
 
 
@@ -122,7 +146,7 @@ export default function PositionPage()
                 handleUpdate={handleUpdatePosition}
                 handleCancel={closeModal}
             /> */}
-            
+            <div style={{margin: "2vh"}}><Button onClick={()=> exportData()} style={{display: "inline", color:"white", backgroundColor:"green", marginRight:"63%"} }>Экспорт</Button>
             <Select
                 value={employeeGuid}
                 style={{margin:"1vh", width:"30%"}}
@@ -133,6 +157,8 @@ export default function PositionPage()
                 }}
                 options={setEmployeeOptions(employees)}
             />
+            </div>
+            
 
             {loading ? (
             <Title>Loading</Title>

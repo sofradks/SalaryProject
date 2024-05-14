@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "antd": "^5.17.0"
+    "antd": "^5.17.0",
+    "react-data-export": "^0.4.2",
+    "xlsx": "^0.18.5"
   }
 }

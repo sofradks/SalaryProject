@@ -45,9 +45,14 @@ export const Employees = ({employees, handleDelete, handleOpen}: Props) => {
           key: 'snils',
         },
         {
-          title: 'Серия',
+          title: 'Серия паспорта',
           dataIndex: 'pSeria',
           key: 'pSeria',
+        },
+        {
+          title: 'Номер паспорта',
+          dataIndex: 'pNumber',
+          key: 'pNumber',
         },
         {
           title: 'Ставка',

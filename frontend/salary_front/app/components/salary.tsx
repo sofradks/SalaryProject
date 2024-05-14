@@ -4,6 +4,7 @@ import type { TableProps } from 'antd';
 import { text } from 'stream/consumers';
 import dayjs from 'dayjs';
 
+
 interface Props{
   salarys: Salary[];
   handleDelete: (id:string) => void;
