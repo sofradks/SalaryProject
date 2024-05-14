@@ -4,7 +4,7 @@
         Guid EmployeeGuid ,
         string EmployeeString ,
         decimal Year ,
-        decimal Month,
-        decimal Hours ,
-        decimal Summ );
+        decimal Month);
+        //decimal Hours ,
+        //decimal Summ );
 }

@@ -16,7 +16,7 @@ namespace salary.DataAccess.Configurations
 
             builder.Property(s => s.month).IsRequired();
 
-            builder.Property(s => s.hours).IsRequired();
+            builder.Property(s => s.hours);
 
             builder.Property(s => s.summ);
 

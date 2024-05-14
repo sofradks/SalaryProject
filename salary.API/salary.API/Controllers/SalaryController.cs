@@ -32,8 +32,8 @@ namespace salary.API.Controllers
                 request.EmployeeGuid,
                 request.Year,
                 request.Month,
-                request.Hours,
-                request.Summ
+                0,
+                0
                 );
 
             var salaryId = await _salaryService.CreateSalary(salary);
@@ -49,8 +49,8 @@ namespace salary.API.Controllers
                 request.EmployeeGuid,
                 request.Year,
                 request.Month,
-                request.Hours,
-                request.Summ
+                0,
+                0
                 );
 
             return Ok(salaryId);
