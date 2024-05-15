@@ -6,7 +6,6 @@ import { Menu } from "antd";
 import Link from "next/link";
 
 const items =[
-  {key: "home", label: <Link href={"/"}>Главная</Link>},
   {key: "position", label: <Link href={"/position"}>Должности</Link>},
   {key: "privilege", label: <Link href={"/privilege"}>Льготы/Надбавки</Link>},
   {key: "employee", label: <Link href={"/employee"}>Сотрудники</Link>},

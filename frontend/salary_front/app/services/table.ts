@@ -1,3 +1,5 @@
+import { token } from "../page";
+
 export interface TableRequest {
     employeeGuid:string ,
     employeeString:string ,
@@ -8,7 +10,11 @@ export interface TableRequest {
 }
 
 export const getAllTables = async () => {
-    const response = await fetch("https://localhost:7255/Table")
+    const response = await fetch("https://localhost:7255/Table",{
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+        },
+    })
 
     return response.json();
 };
@@ -18,6 +24,7 @@ export const createTable = async (tableRequest : TableRequest) => {
         method: "POST",
         headers: {
             "content-type" : "application/json",
+            "Authorization" : `Bearer ${token}`,
         },
         body: JSON.stringify(tableRequest),
     });
@@ -28,6 +35,7 @@ export const updateTable = async (id: string, tableRequest:TableRequest) => {
         method: "PUT",
         headers: {
             "content-type" : "application/json",
+            "Authorization" : `Bearer ${token}`,
         },
         body: JSON.stringify(tableRequest),
     });
@@ -36,5 +44,8 @@ export const updateTable = async (id: string, tableRequest:TableRequest) => {
 export const deleteTable = async (id: string) => {
     await fetch(`https://localhost:7255/Table/${id}`,{
         method: "DELETE",
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+        },
     });
 }

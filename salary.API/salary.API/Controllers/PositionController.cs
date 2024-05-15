@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using salary.API.Contracts;
 using salary.Application.Services;
 using salary.Core.Models;
@@ -7,6 +8,7 @@ namespace salary.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class PositionController : ControllerBase
     {
         private readonly IPositionService _positionService;

@@ -15,6 +15,7 @@ namespace salary.DataAccess
         public DbSet<TableEntity> table { get; set; }
         public DbSet<PrivilegeEntity> privileges { get; set; }
         public DbSet<SalaryEntity> salary { get; set; }
+        public DbSet<UserEntity> users { get; set; }
 
     }
 }

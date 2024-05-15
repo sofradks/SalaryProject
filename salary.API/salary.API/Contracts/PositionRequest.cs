@@ -4,4 +4,5 @@
         string Name,
         decimal Hours,
         decimal Salary);
+       
 }

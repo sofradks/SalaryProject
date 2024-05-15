@@ -1,3 +1,5 @@
+import { token } from "../page";
+
 export interface EmployeeRequest {
     surname: string;
     name: string;
@@ -15,7 +17,11 @@ export interface EmployeeRequest {
 }
 
 export const getAllEmployees = async () => {
-    const response = await fetch("https://localhost:7255/Employee")
+    const response = await fetch("https://localhost:7255/Employee", {
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+        },
+    })
 
     return response.json();
 };
@@ -25,6 +31,7 @@ export const createEmployee = async (employeeRequest : EmployeeRequest) => {
         method: "POST",
         headers: {
             "content-type" : "application/json",
+            "Authorization" : `Bearer ${token}`,
         },
         body: JSON.stringify(employeeRequest),
     });
@@ -35,6 +42,7 @@ export const updateEmployee = async (id: string, employeeRequest:EmployeeRequest
         method: "PUT",
         headers: {
             "content-type" : "application/json",
+            "Authorization" : `Bearer ${token}`,
         },
         body: JSON.stringify(employeeRequest),
     });
@@ -43,5 +51,8 @@ export const updateEmployee = async (id: string, employeeRequest:EmployeeRequest
 export const deleteEmployee = async (id: string) => {
     await fetch(`https://localhost:7255/Employee/${id}`,{
         method: "DELETE",
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+        },
     });
 }

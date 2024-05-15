@@ -2,6 +2,9 @@ using salary.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using salary.Application.Services;
 using salary.DataAccess.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//builder.Services.Configure<UserService>(builder.Configuration.GetSection)
 
 builder.Services.AddDbContext<salaryDbContext>(
     options =>
@@ -28,6 +32,33 @@ builder.Services.AddScoped<ITableService, TableService>();
 builder.Services.AddScoped<ITableRepository, TableRepository>();
 builder.Services.AddScoped<ISalaryService, SalaryService>();
 builder.Services.AddScoped<ISalaryRepository, SalaryRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("zhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendoszhendos"))
+                    };
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["cookie"];
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+builder.Services.AddAuthorization();
+
 
 
 var app = builder.Build();
@@ -41,9 +72,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+
+
 
 app.MapControllers();
+
 
 app.UseCors(x =>
 {
@@ -52,4 +85,6 @@ app.UseCors(x =>
     x.WithMethods().AllowAnyMethod();
 });
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.Run();

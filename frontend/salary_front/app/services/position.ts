@@ -1,3 +1,5 @@
+import { token } from "../page";
+
 export interface PositionRequest {
     name: string;
     hours: number;
@@ -5,7 +7,11 @@ export interface PositionRequest {
 }
 
 export const getAllPositions = async () => {
-    const response = await fetch("https://localhost:7255/Position")
+    const response = await fetch("https://localhost:7255/Position", {
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+        },
+    })
 
     return response.json();
 };
@@ -15,6 +21,7 @@ export const createPosition = async (positionRequest : PositionRequest) => {
         method: "POST",
         headers: {
             "content-type" : "application/json",
+            "Authorization" : `Bearer ${token}`,
         },
         body: JSON.stringify(positionRequest),
     });
@@ -25,6 +32,7 @@ export const updatePosition = async (id: string, positionRequest:PositionRequest
         method: "PUT",
         headers: {
             "content-type" : "application/json",
+            "Authorization" : `Bearer ${token}`,
         },
         body: JSON.stringify(positionRequest),
     });
@@ -33,5 +41,8 @@ export const updatePosition = async (id: string, positionRequest:PositionRequest
 export const deletePosition = async (id: string) => {
     await fetch(`https://localhost:7255/Position/${id}`,{
         method: "DELETE",
+        headers: {
+            "Authorization" : `Bearer ${token}`,
+        },
     });
 }
