@@ -27,6 +27,8 @@ export const getAllEmployees = async () => {
 };
 
 export const createEmployee = async (employeeRequest : EmployeeRequest) => {
+    if (employeeRequest.dateOfDismissal=="")
+        employeeRequest.dateOfDismissal="0001-01-01"
     await fetch("https://localhost:7255/Employee",{
         method: "POST",
         headers: {

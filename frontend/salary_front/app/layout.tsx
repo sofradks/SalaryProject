@@ -14,6 +14,7 @@ export const items =[
   {key: "employee", label: <Link href={"/employee"}>Сотрудники</Link>},
   {key: "table", label: <Link href={"/table"}>Табель</Link>},
   {key: "salary", label: <Link href={"/salary"}>Зарплата</Link>},
+  {key: "chart", label: <Link href={"/chart"}>Визуализация</Link>},
 ]
 
 
