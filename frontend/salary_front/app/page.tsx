@@ -6,11 +6,19 @@ import { Button, Input } from "antd";
 import { useEffect, useState } from "react";
 import {  getUserToken, UserRequest } from "./services/users";
 import { setuid } from "process";
+import { items } from "./layout";
+import Link from "next/link";
+import { redirect } from 'next/navigation'
+import { Navigate, Router, useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
+//import { routes } from "../layout"
 
 export let token = "";
 
+
 export default function Home() {
 
+  const router = useRouter()
   const defaultValues = {
     login: "",
     password: "",
@@ -45,6 +53,7 @@ export default function Home() {
         token = tok.token;
       }
       getToken();
+      setTimeout(() => router.push('/position'),1000)
       
     }
 
